@@ -8,4 +8,10 @@ class Command
      $display= ContactManager::toString($result);
      return $display;
  }
+
+ public static function detail($id){
+     $result= ContactManager::findById($id);
+     $display= ContactManager::toString($result);
+     return $display;
+ }
 }

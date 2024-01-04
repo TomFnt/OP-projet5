@@ -7,6 +7,23 @@ class ContactManager
 {
     private static $i = 0;
 
+    public static function findById($id)
+    {
+        $connect = DBConnect::getPDO();
+        $sql= "SELECT * FROM contact WHERE id =".$id;
+
+        $request =$connect->prepare($sql);
+        $request->execute();
+        $result = $request->fetch();
+
+        $detail= New Contact($result['id'],$result['name'],$result['email'],$result['phone_number']);
+        $list[0]["id"]= $detail->getId();
+        $list[0]["name"]= $detail->getName();
+        $list[0]["email"]= $detail->getEmail();
+        $list[0]["tel"]= $detail->getPhoneNumber();
+        return $list;
+    }
+
     public static function findAll()
     {
 
@@ -31,17 +48,15 @@ class ContactManager
 
     public static function toString(array $list){
 
-        echo " \nListe des contact : \n \nid, name, email, phone number \n \n";
-        $i=0;
         foreach ($list as $row){
-            $id=$list[$i]['id'];
-            $name=$list[$i]['name'];
-            $email=$list[$i]['email'];
-            $tel=$list[$i]['tel'];
+            $id=$row['id'];
+            $name=$row['name'];
+            $email=$row['email'];
+            $tel=$row['tel'];
 
             echo "$id, $name, $email, $tel \n";
             echo "\n";
-            $i++;
+
         }
     }
 }
