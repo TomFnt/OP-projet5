@@ -3,17 +3,30 @@ include "Command.php";
 
 while (true) {
     $line = readline("Entrez votre commande (help, list, create, delete, detail) : ");
-    $pattern = '/^(?P<command>\w+)(?: (?P<arguments>.*\d+|\S+))?$/i';
-    preg_match($pattern,$line, $matches);
+    $pattern = '/^\S+|\S+(?=[,])|\d+/i';
+    preg_match_all($pattern,$line, $matches);
 
 
-    $input = strtolower($matches['command']);
-    $arguments = isset($matches['arguments']) ? $matches['arguments'] : null;
+    $matches= $matches[0];
+    $input = array_shift($matches);
 
     switch ($input) {
         case 'create':
+            if(count($matches)== 3){
+                $name= array_shift($matches);
+                $email= array_shift($matches);
+                $phoneNumber=array_shift($matches);
+                return Command::create($name, $email, $phoneNumber);
+            }
+            elseif (!empty($matches)){
+                echo "\nAucun argument n'a été saisi. \n\n";
+                echo "Exemple pour créer une nouveau contact : create John Doe, johnd@gmail.com, 0312345678 \n\n";
+            }
+            else{
+                echo "\nLe nombre d'argument n'est pas valide. \n\n";
+                echo "Exemple pour créer une nouveau contact : create John Doe, johnd@gmail.com, 0312345678 \n\n";
+            }
 
-            var_dump( $arguments);
             break;
 
         case 'list':
@@ -22,28 +35,36 @@ while (true) {
             break;
 
         case 'detail':
-            if ($arguments !=null && is_numeric($arguments))
+            if (!empty($matches) && is_numeric($matches[0]))
             {
-                $id = (int)$arguments;
+                $id = (int)$matches[0];
                 echo "\n Détail pour la commande n° $id : \n\n";
                 echo Command::detail($id);
             }
-            elseif ($arguments !=null )
+            elseif (!empty($matches))
             {
-                echo "\n Vous n'avez pas saisi un ID valide. Exemple pour a commande detail : detail 0 \n\n";
+                echo "\n Vous n'avez pas saisi un ID valide. \n\nExemple pour a commande detail : detail 0 \n\n";
             }
             else {
-                echo "\n La commande detail a été saisie sans ID. Exemple pour a commande detail: detail 0 \n\n";
+                echo "\n La commande detail a été saisie sans ID. \n\nExemple pour a commande detail: detail 0 \n\n";
             }
             break;
 
         case 'delete':
-            if ($arguments !=null && is_numeric($arguments))
+            if (!empty($matches) && is_numeric($matches[0]))
             {
-                $id = (int)$arguments;
-                echo "delete l'id $id \n\n";
+                $id = (int)$matches[0];
+                $check= readline("Êtes-vous sûr de vouloir supprimer le contact n°$id ? (yes/no) : ");
+                if($check=="yes" || $check=="y")
+                {
+                   Command::delete($id);
+                }
+                else
+                {
+                echo "\nAnnulation de la suppression du contact n°$id. \n\n";
+                }
             }
-            elseif ($arguments !=null )
+            elseif (!empty($matches))
             {
                 echo "\n Vous n'avez pas saisi un ID valide. Exemple pour a commande delete : delete 0 \n\n";
             }

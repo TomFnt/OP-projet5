@@ -21,7 +21,8 @@ class ContactManager
         $list[0]["name"]= $detail->getName();
         $list[0]["email"]= $detail->getEmail();
         $list[0]["tel"]= $detail->getPhoneNumber();
-        return $list;
+
+        return self::toString($list);
     }
 
     public static function findAll()
@@ -43,7 +44,7 @@ class ContactManager
             $list[self::$i]["tel"]= $contact[self::$i]->getPhoneNumber();
             self::$i++;
         }
-        return $list;
+        return self::toString($list);
     }
 
     public static function toString(array $list){
@@ -57,6 +58,34 @@ class ContactManager
             echo "$id, $name, $email, $tel \n";
             echo "\n";
 
+        }
+    }
+
+    public static function createContact($name, $email, $phoneNumber)
+    {
+
+        $connect = DBConnect::getPDO();
+        $sql="INSERT INTO `contact` (`name`, `email`, `phone_number`) VALUES (?, ?, ?);";
+        $request =$connect->prepare($sql);
+
+        if ($request->execute([$name, $email, $phoneNumber]) ==true){
+            echo "\nCréation du nouveau contact réussi\n\n";
+        }
+        else {
+            echo "\néchec lors de la création du nouveau contact\n\n";
+        }
+    }
+    public static function delete($id)
+    {
+        $connect = DBConnect::getPDO();
+        $sql="DELETE FROM `contact` WHERE  `id`=".$id;
+        $request =$connect->prepare($sql);
+
+        if ( $request->execute() ==true ){
+            echo "\nSuppression du contact réussi\n\n";
+        }
+        else {
+            echo "\néchec lors de la suppression contact\n\n";
         }
     }
 }
