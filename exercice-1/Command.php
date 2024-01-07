@@ -18,4 +18,8 @@ return $result= ContactManager::createContact($name, $email, $phoneNumber);
  public static function delete($id){
      return $result= ContactManager::delete($id);
  }
+
+ public static function modify($defaultName, $defaultEmail, $defaultPhoneNumber, $name, $email, $phoneNumber, $id){
+    return ContactManager::modifyContact($defaultName, $defaultEmail, $defaultPhoneNumber, $name, $email, $phoneNumber, $id);
+ }
 }
