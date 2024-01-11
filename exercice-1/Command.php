@@ -7,19 +7,19 @@ class Command
      return $result= ContactManager::findAll();
  }
 
- public static function detail($id){
-     return $result= ContactManager::findById($id);
+ public static function detail($matches){
+     return $result= ContactManager::findById($matches);
  }
 
- public static function create($name, $email, $phoneNumber){
-return $result= ContactManager::createContact($name, $email, $phoneNumber);
+ public static function create($matches){
+return $result= ContactManager::createContact($matches);
  }
 
- public static function delete($id){
-     return $result= ContactManager::delete($id);
+ public static function delete($matches){
+     return $result= ContactManager::delete($matches);
  }
 
- public static function modify($defaultName, $defaultEmail, $defaultPhoneNumber, $name, $email, $phoneNumber, $id){
-    return ContactManager::modifyContact($defaultName, $defaultEmail, $defaultPhoneNumber, $name, $email, $phoneNumber, $id);
+ public static function modify($matches){
+    return ContactManager::modifyContact($matches);
  }
 }

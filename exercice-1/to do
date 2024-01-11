@@ -15,10 +15,16 @@
 
 - Amélio :
 
---> command help
---> command modify
+--> command help X
+--> command modify X
+--> command delete X
 --> remplacer la méthode toString() par la méthode magique __toString()
 
---> créer fichier config pour déclarer constante pour DBConnect
---> Faire une gestion des erreurs dans le contactManager
---> faire en sorte de ne pas sortir du terminal quand je créer le contact
+--> patch les if (format id invalide)
+--> retour à la ligne dans le catch, gestion couleur dans le cmd X
+
+--> Faire une gestion des erreurs dans le contactManager X
+    -create X
+    -detail X
+    -modify X
+    -delete X
