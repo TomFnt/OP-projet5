@@ -11,14 +11,14 @@
     --> Créer la fonction toString() qui permet de convertir l'objet en string pour pouvoir l'afficher X
     --> retourner l'affichage dans la méthode toString() X
 
--Checkpoint étape 6 (créer repo et push code dessus) X
+-Checkpoint étape 6 (créer repo et push code dessus)
 
 - Amélio :
 
---> command help X
---> command modify X
+--> command help
+--> command modify
 --> remplacer la méthode toString() par la méthode magique __toString()
---> Faire une gestion des erreurs dans le contactManager
 
 --> créer fichier config pour déclarer constante pour DBConnect
+--> Faire une gestion des erreurs dans le contactManager
 --> faire en sorte de ne pas sortir du terminal quand je créer le contact
