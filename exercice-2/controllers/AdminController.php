@@ -80,6 +80,7 @@ class AdminController {
         $_SESSION['idUser'] = $user->getId();
 
         // On redirige vers la page d'administration.
+
         Utils::redirect("admin");
     }
 
@@ -175,5 +176,57 @@ class AdminController {
        
         // On redirige vers la page d'administration.
         Utils::redirect("admin");
+    }
+
+    /**
+     *
+     * affiche le dashboard Article.
+     * @return void
+     */
+    public function dashboardArticle(){
+
+        $this->checkIfUserIsConnected();
+        $id = Utils::request("id", -1);
+
+        //On récupère nos articles et countNbComment.
+        $articleManager = new ArticleManager();
+        $articleList =$articleManager->getAllArticles();
+
+        $commentManager= new CommentManager();
+        $commentCountList=$commentManager->countComments();
+        $i=0;
+
+
+        //regroupe dans un seul array $data les info, plus simple pour l'envoie des données
+        foreach($articleList as $article){
+            $articleId= $article->getId();
+            $articleTitle=$article->getTitle();
+            $articleDateAdd=$article->getDateCreation();
+
+            // array $data[id, titre, nbvue, nbcomments, date-création]
+            $data[$i]['id']=$articleId;
+            $data[$i]['title']=$articleTitle;
+            $data[$i]['date_add']=$articleDateAdd;
+
+            foreach ($commentCountList as $commentRow){
+                if( $commentRow['id_article']!==$articleId) {
+
+                    continue;
+                }
+                else {
+                    $data[$i]['nbComments']= $commentRow['nb_comments'];
+                }
+            }
+            //si on a pas de commentaires, on le mets à 0 ici
+            if(!isset($data[$i]['nbComments'])){
+                $data[$i]['nbComments']=0;
+            }
+            $i++;
+        }
+        // On affiche la page de modification de l'article.
+        $view = new View("Dashboard des articles");
+        $view->render("dashboardArticle", [
+            'articles' => $data
+        ]);
     }
 }

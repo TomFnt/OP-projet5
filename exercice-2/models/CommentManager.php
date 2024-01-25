@@ -66,4 +66,17 @@ class CommentManager extends AbstractEntityManager
         return $result->rowCount() > 0;
     }
 
+    /**
+     * Compte le nombre de commentaire d'un article.
+     * @param
+     * @return array $nbComments
+     */
+    public function countComments()
+    {
+        $sql = "SELECT id_article, COUNT(*) AS nb_comments FROM comment GROUP BY id_article;";
+        $nbComments = $this->db->query($sql);
+
+
+        return $nbComments->fetchAll();
+    }
 }
