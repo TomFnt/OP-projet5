@@ -350,3 +350,32 @@ footer {
     color: white;
     background-color: var(--headerColor);
 }
+
+/**
+* Custom CSS
+ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background-color: var(--commentColor);
+    color: white;
+    text-align: center;
+}
+th, td{
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.impair-row {
+    background-color: white;
+    color: black;
+}
+.pair-row {
+    background-color: antiquewhite;
+    color: black;
+}
+
