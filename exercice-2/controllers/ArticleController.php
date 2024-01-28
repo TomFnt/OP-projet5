@@ -24,15 +24,18 @@ class ArticleController
         // Récupération de l'id de l'article demandé.
         $id = Utils::request("id", -1);
 
+
         $articleManager = new ArticleManager();
+        $articleManager->incrementNbViews($id);
         $article = $articleManager->getArticleById($id);
-        
+
         if (!$article) {
             throw new Exception("L'article demandé n'existe pas.");
         }
 
         $commentManager = new CommentManager();
         $comments = $commentManager->getAllCommentsByArticleId($id);
+
 
         $view = new View($article->getTitle());
         $view->render("detailArticle", ['article' => $article, 'comments' => $comments]);

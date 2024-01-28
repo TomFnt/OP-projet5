@@ -200,26 +200,21 @@ class AdminController {
         //regroupe dans un seul array $data les info, plus simple pour l'envoie des données
         foreach($articleList as $article){
             $articleId= $article->getId();
-            $articleTitle=$article->getTitle();
-            $articleDateAdd=$article->getDateCreation();
 
             // array $data[id, titre, nbvue, nbcomments, date-création]
             $data[$i]['id']=$articleId;
-            $data[$i]['title']=$articleTitle;
-            $data[$i]['date_add']=$articleDateAdd;
+            $data[$i]['title']=$article->getTitle();
+            $data[$i]['date_add']=$article->getDateCreation();;
+            $data[$i]['nbViews']=$article->getNbViews();
+
+            //valeur par défaut
+            $data[$i]['nbComments']=0;
 
             foreach ($commentCountList as $commentRow){
-                if( $commentRow['id_article']!==$articleId) {
-
-                    continue;
-                }
-                else {
+                if( $commentRow['id_article']==$articleId) {
                     $data[$i]['nbComments']= $commentRow['nb_comments'];
+                    break;
                 }
-            }
-            //si on a pas de commentaires, on le mets à 0 ici
-            if(!isset($data[$i]['nbComments'])){
-                $data[$i]['nbComments']=0;
             }
             $i++;
         }
