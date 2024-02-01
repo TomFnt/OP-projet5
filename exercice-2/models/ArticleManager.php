@@ -7,11 +7,44 @@ class ArticleManager extends AbstractEntityManager
 {
     /**
      * Récupère tous les articles.
-     * @return array : un tableau d'objets Article.
+     * @param array $info
+     * @return Article[]
      */
-    public function getAllArticles() : array
+
+    public function getAllArticles( array $info=[]) : array
     {
-        $sql = "SELECT * FROM article";
+        $actualPage = $info['actual_page'];
+        $limiter= $info['limiter'];
+        if($actualPage == 1)
+        {
+            $firstArticle = 0;
+        }
+        else{
+            $firstArticle = ( $actualPage -1)*$limiter;
+        }
+
+
+        if(isset($info['column']) && isset($info['order']))
+        {
+            $column= $info['column'];
+            $order = $info['order'];
+            $filter=" ORDER BY $column $order ";
+        }
+        else
+        {
+            $filter="";
+        }
+
+        if( isset($info['actual_page']))
+        {
+           $page=" LIMIT $firstArticle, $limiter ";
+        }
+        else
+        {
+            $page="";
+        }
+
+        $sql = "SELECT * FROM article".$filter.$page;
         $result = $this->db->query($sql);
         $articles = [];
 
@@ -106,6 +139,40 @@ class ArticleManager extends AbstractEntityManager
             ]);
     }
 
+    /**
+     *
+     * Compte le nombre total d'article créer
+     * @return int $nbPages
+     */
+    public function countAllArticles()
+    {
+        $sql = "SELECT COUNT(*) AS nb_page FROM article;";
+        $result = $this->db->query($sql);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        $nbAticle= $row["nb_page"];
 
+        return $nbAticle;
+    }
+
+    /**
+     * Compte le nombre de page à afficher dans la pagination du tableau de la page dashboard
+     * @param  int $actualPage
+     * @return array $info
+     */
+    public function countTablePage($actualPage)
+    {
+        //parameter from number of article to display in page
+        $nbArticleInPage=5;
+        $listArticle = $this->countAllArticles();
+
+        $nbPage = ceil($listArticle/ $nbArticleInPage);
+
+        $info=[];
+        $info['nb_pages'] = intval($nbPage);
+        $info['limiter'] = $nbArticleInPage;
+        $info['actual_page']=$actualPage;
+
+        return $info;
+    }
 
 }

@@ -365,17 +365,50 @@ th {
     color: white;
     text-align: center;
 }
+th:hover{
+    background-color: var(--commentPaleColor);
+}
+
+
 th, td{
     border: 1px solid black;
     padding: 8px;
 }
 
-.impair-row {
-    background-color: white;
-    color: black;
-}
-.pair-row {
+.dashboard tr:nth-child(2n)
+{
     background-color: antiquewhite;
-    color: black;
+}
+
+
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding-top: 10px;
+}
+
+.pagination a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    margin: 0 2px;
+    cursor: pointer;
+}
+
+.pagination a:hover {
+    background-color: var(--commentPaleColor);
+    color: white;
+}
+
+.current-page {
+    background-color: var(--commentColor);
+    color: white !important;
+}
+
+.pagination .prev:hover,
+.pagination .next:hover {
+    background-color: var(--commentPaleColor);
 }
 

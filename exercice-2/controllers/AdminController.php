@@ -186,11 +186,42 @@ class AdminController {
     public function dashboardArticle(){
 
         $this->checkIfUserIsConnected();
-        $id = Utils::request("id", -1);
+        $page = intval(Utils::request("page"));
+        if(!isset($page))
+        {
+            $page=1;
+        }
+
+        $column = Utils::request("column");
+        $order=Utils::request("order");
+        if(!isset($column) || $column==""|| !isset($order) || $order=="")
+        {
+            $column=NULL;
+            $order=NULL;
+        }
+
+        //set table rows
+        $rows=[];
+        $rows[0]= array( "column" => "title", "label" => "Titre de l'article");
+        $rows[1]= array("column" => "nb_comment", "label" => "Nombre de commentaires");
+        $rows[2]= array("column" => "nb_views", "label" => "Nombre de vues");
+        $rows[3]= array("column" => "date_creation", "label" => "Date de création de l'article");
+
 
         //On récupère nos articles et countNbComment.
         $articleManager = new ArticleManager();
-        $articleList =$articleManager->getAllArticles();
+        $info= $articleManager->countTablePage($page);
+
+        //on passe dans le tableau $info les différentes info qui compose notre l'url
+        $info['column']= $column;
+        $info['order']=$order;
+        $info['action_block']="?action=dashboard";
+        $info['page_block']="&page=$page";
+        $info['filter_block']= $column!== NULL && $order !== NULL ? "&column=$column&order=$order": " ";
+
+
+
+        $articleList =$articleManager->getAllArticles($info);
 
         $commentManager= new CommentManager();
         $commentCountList=$commentManager->countComments();
@@ -221,7 +252,10 @@ class AdminController {
         // On affiche la page de modification de l'article.
         $view = new View("Dashboard des articles");
         $view->render("dashboardArticle", [
-            'articles' => $data
+            'articles' => $data,
+            'info' => $info,
+            'rows'=> $rows
+
         ]);
     }
 }
