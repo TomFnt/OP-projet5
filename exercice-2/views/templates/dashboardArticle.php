@@ -6,15 +6,17 @@
             foreach($rows as $i => $row){ ?>
                 <?php if($row['column']==$info['column'] && $info['order']=='ASC') {?>
                     <th>
-                        <a href="<?=$info['action_block'].$info['page_block'].'&column='.$info['column'].'&order=DESC'?>">
-                            <?= $row['label']." ".$info['order']?>
+                        <a href="<?=$info['action_block'].$info['page_block'].'&column='.$info['column']?>">
+                            <?= $row['label']?>
+                            <span class="arrow-down"></span>
                         </a>
                     </th>
                 <?php }
                  elseif($row['column']==$info['column'] && $info['order']=='DESC') {?>
                     <th>
                         <a href="<?=$info['action_block'].$info['page_block'].'&column='.$info['column'].'&order=ASC'?>">
-                        <?= $row['label']." ".$info['order']?>
+                        <?= $row['label']?>
+                            <span class="arrow-up"></span>
                         </a>
                     </th>
                 <?php }

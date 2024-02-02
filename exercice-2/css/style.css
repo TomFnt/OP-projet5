@@ -407,8 +407,24 @@ th, td{
     color: white !important;
 }
 
-.pagination .prev:hover,
-.pagination .next:hover {
-    background-color: var(--commentPaleColor);
+.arrow-down {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid white;
+    margin-left: 5px; /* Marge à ajuster selon la mise en page */
 }
+
+.arrow-up {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid white;
+    margin-left: 5px; /* Marge à ajuster selon votre mise en page */
+}
+
 
