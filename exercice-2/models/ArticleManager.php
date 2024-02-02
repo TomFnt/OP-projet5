@@ -3,7 +3,7 @@
 /**
  * Classe qui gère les articles.
  */
-class ArticleManager extends AbstractEntityManager 
+class ArticleManager extends AbstractEntityManager
 {
     /**
      * Récupère tous les articles.
@@ -13,38 +13,45 @@ class ArticleManager extends AbstractEntityManager
 
     public function getAllArticles( array $info=[]) : array
     {
-        $actualPage = $info['actual_page'];
-        $limiter= $info['limiter'];
-        if($actualPage == 1)
-        {
-            $firstArticle = 0;
-        }
-        else{
-            $firstArticle = ( $actualPage -1)*$limiter;
-        }
 
+        //default request for admin view
+        $sql = "SELECT * FROM article";
 
-        if(isset($info['column']) && isset($info['order']))
-        {
-            $column= $info['column'];
-            $order = $info['order'];
-            $filter=" ORDER BY $column $order ";
-        }
-        else
-        {
-            $filter="";
-        }
+        //define specified querry part in case if page and column ordering are specified in url. Querry use for dashboard Article view
+        if(isset($info['actual_page']) && isset($info['limiter'])) {
+            $actualPage = $info['actual_page'];
+            $limiter = $info['limiter'];
 
-        if( isset($info['actual_page']))
-        {
-           $page=" LIMIT $firstArticle, $limiter ";
-        }
-        else
-        {
-            $page="";
-        }
+            if ($actualPage == 1) {
+                $firstArticle = 0;
+            } else {
+                $firstArticle = ($actualPage - 1) * $limiter;
+            }
 
-        $sql = "SELECT * FROM article".$filter.$page;
+            if (isset($info['column']) && isset($info['order'])) {
+                $column = $info['column'];
+                $order = $info['order'];
+                $filter = " ORDER BY $column $order ";
+            }
+            else{
+                $filter="";
+            }
+
+            if (isset($info['actual_page'])) {
+                $page = " LIMIT $firstArticle, $limiter ";
+            }
+
+            $sql ="SELECT a.*, COALESCE(c.nb_comments, 0) AS nb_comments
+                   FROM article a
+                   LEFT JOIN (
+                    SELECT id_article, COUNT(*) AS nb_comments
+                    FROM comment
+                    GROUP BY id_article
+                    ) c ON a.id = c.id_article $filter $page";
+
+        }
+        var_dump($sql);
+
         $result = $this->db->query($sql);
         $articles = [];
 
@@ -53,7 +60,7 @@ class ArticleManager extends AbstractEntityManager
         }
         return $articles;
     }
-    
+
     /**
      * Récupère un article par son id.
      * @param int $id : l'id de l'article.
@@ -76,7 +83,7 @@ class ArticleManager extends AbstractEntityManager
      * @param Article $article : l'article à ajouter ou modifier.
      * @return void
      */
-    public function addOrUpdateArticle(Article $article) : void 
+    public function addOrUpdateArticle(Article $article) : void
     {
         if ($article->getId() == -1) {
             $this->addArticle($article);
@@ -136,7 +143,7 @@ class ArticleManager extends AbstractEntityManager
         $sql ="UPDATE article SET nb_views = nb_views + 1 WHERE id= :id";
         $this->db->query($sql, [
             'id' => $id
-            ]);
+        ]);
     }
 
     /**

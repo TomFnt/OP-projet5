@@ -203,7 +203,7 @@ class AdminController {
         //set table rows
         $rows=[];
         $rows[0]= array( "column" => "title", "label" => "Titre de l'article");
-        $rows[1]= array("column" => "nb_comment", "label" => "Nombre de commentaires");
+        $rows[1]= array("column" => "nb_comments", "label" => "Nombre de commentaires");
         $rows[2]= array("column" => "nb_views", "label" => "Nombre de vues");
         $rows[3]= array("column" => "date_creation", "label" => "Date de création de l'article");
 
