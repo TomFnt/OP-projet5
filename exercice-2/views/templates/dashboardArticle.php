@@ -1,4 +1,4 @@
-<h2>Edition des articles</h2>
+<h2>Dashboard des articles</h2>
     <table class="dashboard">
         <thead>
         <tr>
