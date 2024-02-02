@@ -50,7 +50,6 @@ class ArticleManager extends AbstractEntityManager
                     ) c ON a.id = c.id_article $filter $page";
 
         }
-        var_dump($sql);
 
         $result = $this->db->query($sql);
         $articles = [];
