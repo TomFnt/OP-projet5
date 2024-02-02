@@ -74,9 +74,17 @@ try {
             $adminController->deleteArticle();
             break;
 
-        case 'dashboard':
+        case 'dashboardArticle':
             $adminController = new AdminController();
             $adminController->dashboardArticle();
+            break;
+        case 'dashboardComment':
+            $commentController = new CommentController();
+            $commentController->dashboardComment();
+            break;
+        case 'deleteComment':
+            $commentController = new CommentController();
+            $commentController->deleteComment();
             break;
 
         default:

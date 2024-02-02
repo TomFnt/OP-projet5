@@ -369,7 +369,6 @@ th:hover{
     background-color: var(--commentPaleColor);
 }
 
-
 th, td{
     border: 1px solid black;
     padding: 8px;
@@ -426,5 +425,23 @@ th, td{
     border-bottom: 5px solid white;
     margin-left: 5px; /* Marge à ajuster selon votre mise en page */
 }
+
+.del-link {
+    text-decoration: underline;
+    color: black;
+}
+
+.del-link:hover {
+     color: red !important;
+ }
+
+.comment-link {
+    text-decoration: underline;
+}
+
+.comment-link:hover {
+     color: var(--commentPaleColor) !important;
+ }
+
 
 

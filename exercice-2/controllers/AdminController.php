@@ -215,7 +215,8 @@ class AdminController {
         //on passe dans le tableau $info les différentes info qui compose notre l'url
         $info['column']= $column;
         $info['order']=$order;
-        $info['action_block']="?action=dashboard";
+        $info['action_block']="?action=dashboardArticle";
+        $info['action_comment']="?action=dashboardComment&articleId=";
         $info['page_block']="&page=$page";
         $info['filter_block']= $column!== NULL && $order !== NULL ? "&column=$column&order=$order": " ";
 
@@ -249,7 +250,7 @@ class AdminController {
             }
             $i++;
         }
-        // On affiche la page de modification de l'article.
+        // On affiche la page de dashboard l'article.
         $view = new View("Dashboard des articles");
         $view->render("dashboardArticle", [
             'articles' => $data,

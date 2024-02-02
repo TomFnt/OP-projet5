@@ -161,7 +161,7 @@ class ArticleManager extends AbstractEntityManager
     }
 
     /**
-     * Compte le nombre de page à afficher dans la pagination du tableau de la page dashboard
+     * Compte le nombre de page à afficher dans la pagination du tableau de la page dashboard Article
      * @param  int $actualPage
      * @return array $info
      */

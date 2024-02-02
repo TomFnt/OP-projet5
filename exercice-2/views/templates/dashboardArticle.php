@@ -34,7 +34,12 @@
         <?php foreach ($articles as $i => $article) {?>
             <tr>
                 <td> <?=$article['title']?></td>
-                <td> <?=$article['nbComments']?></td>
+                <?php if($article['nbComments']==0){?>
+                    <td><?=$article['nbComments']?></td>
+                <?php }
+                else{?>
+                <td> <a href="<?=$info['action_comment'].$article['id'].$info['page_block']?>" class="comment-link"><?=$article['nbComments']?></a></td>
+                <?php }?>
                 <td><?=$article['nbViews'] ?></td>
                 <td> <?=Utils::convertDateToFrenchFormat($article['date_add'])?></td>
             </tr>

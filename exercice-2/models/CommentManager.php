@@ -8,17 +8,40 @@ class CommentManager extends AbstractEntityManager
     /**
      * Récupère tous les commentaires d'un article.
      * @param int $idArticle : l'id de l'article.
+     * @param array $info
      * @return array : un tableau d'objets Comment.
      */
-    public function getAllCommentsByArticleId(int $idArticle) : array
+    public function getAllCommentsByArticleId(int $idArticle, array $info=[]) : array
     {
-        $sql = "SELECT * FROM comment WHERE id_article = :idArticle";
-        $result = $this->db->query($sql, ['idArticle' => $idArticle]);
-        $comments = [];
+        $page="";
+        $filter="";
 
-        while ($comment = $result->fetch()) {
-            $comments[] = new Comment($comment);
+        //define specified querry part in case if page and column ordering are specified in url. Querry use for dashboard Article view
+        if (isset($info['actual_page']) && isset($info['limiter'])) {
+            $actualPage = $info['actual_page'];
+            $limiter = $info['limiter'];
+
+            if ($actualPage == 1) {
+                $firstArticle = 0;
+            } else {
+                $firstArticle = ($actualPage - 1) * $limiter;
+            }
+
+            if (isset($info['column']) && isset($info['order'])) {
+                $column = $info['column'];
+                $order = $info['order'];
+                $filter = " ORDER BY $column $order ";
+            }
+            if (isset($info['actual_page'])) {
+                $page = " LIMIT $firstArticle, $limiter ";
+            }
         }
+            $sql = "SELECT * FROM comment WHERE id_article = $idArticle $filter $page";
+            $result = $this->db->query($sql);
+            $comments = [];
+            while ($comment = $result->fetch()) {
+                $comments[] = new Comment($comment);
+            }
         return $comments;
     }
 
@@ -79,4 +102,36 @@ class CommentManager extends AbstractEntityManager
 
         return $nbComments->fetchAll();
     }
+
+    /**
+     * Compte le nombre de page à afficher dans la pagination du tableau de la page dashboard Comment
+     * @param  int $actualPage
+     * @param  int $idArticle
+     * @return array $info
+     */
+    public function countPageComment(int $actualPage, int $idArticle)
+    {
+        //parameter from number of article to display in page
+        $nbCommentInPage=5;
+        $countList = $this->countComments();
+        $countComment=0;
+
+        foreach($countList as $comment)
+        {
+            if($comment['id_article'] == $idArticle)
+            {
+                $countComment= $comment['nb_comments'];
+            }
+        }
+
+        $nbPage = ceil($countComment/ $nbCommentInPage);
+
+        $info=[];
+        $info['nb_pages'] = intval($nbPage);
+        $info['limiter'] = $nbCommentInPage;
+        $info['actual_page']=$actualPage;
+
+        return $info;
+    }
+
 }
