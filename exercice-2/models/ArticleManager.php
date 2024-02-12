@@ -19,8 +19,8 @@ class ArticleManager extends AbstractEntityManager
 
         //define specified querry part in case if page and column ordering are specified in url. Querry use for dashboard Article view
         if(isset($info['actual_page']) && isset($info['limiter'])) {
-            $actualPage = $info['actual_page'];
-            $limiter = $info['limiter'];
+            $actualPage = (int) $info['actual_page'];
+            $limiter = (int) $info['limiter'];
 
             if ($actualPage == 1) {
                 $firstArticle = 0;
@@ -48,7 +48,6 @@ class ArticleManager extends AbstractEntityManager
                     FROM comment
                     GROUP BY id_article
                     ) c ON a.id = c.id_article $filter $page";
-
         }
 
         $result = $this->db->query($sql);
