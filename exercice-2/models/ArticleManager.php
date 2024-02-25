@@ -11,7 +11,7 @@ class ArticleManager extends AbstractEntityManager
      * @return Article[]
      */
 
-    public function getAllArticles( array $info=[]) : array
+    public function getAllArticles(array $info = []): array
     {
 
         //default request for admin view
@@ -32,16 +32,15 @@ class ArticleManager extends AbstractEntityManager
                 $column = $info['column'];
                 $order = $info['order'];
                 $filter = " ORDER BY $column $order ";
-            }
-            else{
-                $filter="";
+            } else {
+                $filter = "";
             }
 
             if (isset($info['actual_page'])) {
                 $page = " LIMIT $firstArticle, $limiter ";
             }
 
-            $sql ="SELECT a.*, COALESCE(c.nb_comments, 0) AS nb_comments
+            $sql = "SELECT a.*, COALESCE(c.nb_comments, 0) AS nb_comments
                    FROM article a
                    LEFT JOIN (
                     SELECT id_article, COUNT(*) AS nb_comments
@@ -64,7 +63,7 @@ class ArticleManager extends AbstractEntityManager
      * @param int $id : l'id de l'article.
      * @return Article|null : un objet Article ou null si l'article n'existe pas.
      */
-    public function getArticleById(int $id) : ?Article
+    public function getArticleById(int $id): ?Article
     {
         $sql = "SELECT * FROM article WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $id]);
@@ -81,7 +80,7 @@ class ArticleManager extends AbstractEntityManager
      * @param Article $article : l'article à ajouter ou modifier.
      * @return void
      */
-    public function addOrUpdateArticle(Article $article) : void
+    public function addOrUpdateArticle(Article $article): void
     {
         if ($article->getId() == -1) {
             $this->addArticle($article);
@@ -95,7 +94,7 @@ class ArticleManager extends AbstractEntityManager
      * @param Article $article : l'article à ajouter.
      * @return void
      */
-    public function addArticle(Article $article) : void
+    public function addArticle(Article $article): void
     {
         $sql = "INSERT INTO article (id_user, title, content, date_creation) VALUES (:id_user, :title, :content, NOW())";
         $this->db->query($sql, [
@@ -110,7 +109,7 @@ class ArticleManager extends AbstractEntityManager
      * @param Article $article : l'article à modifier.
      * @return void
      */
-    public function updateArticle(Article $article) : void
+    public function updateArticle(Article $article): void
     {
         $sql = "UPDATE article SET title = :title, content = :content, date_update = NOW() WHERE id = :id";
         $this->db->query($sql, [
@@ -125,7 +124,7 @@ class ArticleManager extends AbstractEntityManager
      * @param int $id : l'id de l'article à supprimer.
      * @return void
      */
-    public function deleteArticle(int $id) : void
+    public function deleteArticle(int $id): void
     {
         $sql = "DELETE FROM article WHERE id = :id";
         $this->db->query($sql, ['id' => $id]);
@@ -137,8 +136,9 @@ class ArticleManager extends AbstractEntityManager
      * @param int $nbView
      * @return void
      */
-    function incrementNbViews($id) {
-        $sql ="UPDATE article SET nb_views = nb_views + 1 WHERE id= :id";
+    public function incrementNbViews($id): void
+    {
+        $sql = "UPDATE article SET nb_views = nb_views + 1 WHERE id= :id";
         $this->db->query($sql, [
             'id' => $id
         ]);
@@ -149,12 +149,12 @@ class ArticleManager extends AbstractEntityManager
      * Compte le nombre total d'article créer
      * @return int $nbPages
      */
-    public function countAllArticles()
+    public function countAllArticles(): int
     {
         $sql = "SELECT COUNT(*) AS nb_page FROM article;";
         $result = $this->db->query($sql);
         $row = $result->fetch(PDO::FETCH_ASSOC);
-        $nbAticle= $row["nb_page"];
+        $nbAticle = $row["nb_page"];
 
         return $nbAticle;
     }
@@ -164,18 +164,18 @@ class ArticleManager extends AbstractEntityManager
      * @param  int $actualPage
      * @return array $info
      */
-    public function countTablePage($actualPage)
+    public function countTablePage($actualPage): array
     {
         //parameter from number of article to display in page
-        $nbArticleInPage=5;
+        $nbArticleInPage = 5;
         $listArticle = $this->countAllArticles();
 
-        $nbPage = ceil($listArticle/ $nbArticleInPage);
+        $nbPage = ceil($listArticle / $nbArticleInPage);
 
-        $info=[];
+        $info = [];
         $info['nb_pages'] = intval($nbPage);
         $info['limiter'] = $nbArticleInPage;
-        $info['actual_page']=$actualPage;
+        $info['actual_page'] = $actualPage;
 
         return $info;
     }

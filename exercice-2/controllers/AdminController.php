@@ -1,15 +1,16 @@
-<?php 
+<?php
+
 /**
  * Contrôleur de la partie admin.
  */
- 
-class AdminController {
 
+class AdminController
+{
     /**
      * Affiche la page d'administration.
      * @return void
      */
-    public function showAdmin() : void
+    public function showAdmin(): void
     {
         // On vérifie que l'utilisateur est connecté.
         $this->checkIfUserIsConnected();
@@ -29,7 +30,7 @@ class AdminController {
      * Vérifie que l'utilisateur est connecté.
      * @return void
      */
-    private function checkIfUserIsConnected() : void
+    private function checkIfUserIsConnected(): void
     {
         // On vérifie que l'utilisateur est connecté.
         if (!isset($_SESSION['user'])) {
@@ -41,7 +42,7 @@ class AdminController {
      * Affichage du formulaire de connexion.
      * @return void
      */
-    public function displayConnectionForm() : void 
+    public function displayConnectionForm(): void
     {
         $view = new View("Connexion");
         $view->render("connectionForm");
@@ -51,7 +52,7 @@ class AdminController {
      * Connexion de l'utilisateur.
      * @return void
      */
-    public function connectUser() : void 
+    public function connectUser(): void
     {
         // On récupère les données du formulaire.
         $login = Utils::request("login");
@@ -88,7 +89,7 @@ class AdminController {
      * Déconnexion de l'utilisateur.
      * @return void
      */
-    public function disconnectUser() : void 
+    public function disconnectUser(): void
     {
         // On déconnecte l'utilisateur.
         unset($_SESSION['user']);
@@ -101,7 +102,7 @@ class AdminController {
      * Affichage du formulaire d'ajout d'un article.
      * @return void
      */
-    public function showUpdateArticleForm() : void 
+    public function showUpdateArticleForm(): void
     {
         $this->checkIfUserIsConnected();
 
@@ -112,7 +113,7 @@ class AdminController {
         $articleManager = new ArticleManager();
         $article = $articleManager->getArticleById($id);
 
-        // Si l'article n'existe pas, on en crée un vide. 
+        // Si l'article n'existe pas, on en crée un vide.
         if (!$article) {
             $article = new Article();
         }
@@ -125,11 +126,11 @@ class AdminController {
     }
 
     /**
-     * Ajout et modification d'un article. 
+     * Ajout et modification d'un article.
      * On sait si un article est ajouté car l'id vaut -1.
      * @return void
      */
-    public function updateArticle() : void 
+    public function updateArticle(): void
     {
         $this->checkIfUserIsConnected();
 
@@ -164,7 +165,7 @@ class AdminController {
      * Suppression d'un article.
      * @return void
      */
-    public function deleteArticle() : void
+    public function deleteArticle(): void
     {
         $this->checkIfUserIsConnected();
 
@@ -173,7 +174,7 @@ class AdminController {
         // On supprime l'article.
         $articleManager = new ArticleManager();
         $articleManager->deleteArticle($id);
-       
+
         // On redirige vers la page d'administration.
         Utils::redirect("admin");
     }
@@ -183,68 +184,68 @@ class AdminController {
      * affiche le dashboard Article.
      * @return void
      */
-    public function dashboardArticle(){
+    public function dashboardArticle(): void
+    {
 
         $this->checkIfUserIsConnected();
         $page = intval(Utils::request("page"));
-        if(!isset($page))
-        {
-            $page=1;
+        if(!isset($page)) {
+            $page = 1;
         }
 
         $column = Utils::request("column");
-        $order=Utils::request("order");
-        if(!isset($column) || $column==""|| !isset($order) || $order=="")
-        {
-            $column=NULL;
-            $order=NULL;
+        $order = Utils::request("order");
+        if(!isset($column) || $column == "" || !isset($order) || $order == "") {
+            $column = null;
+            $order = null;
         }
 
         //set table rows
-        $rows=[];
-        $rows[0]= array( "column" => "title", "label" => "Titre de l'article");
-        $rows[1]= array("column" => "nb_comments", "label" => "Nombre de commentaires");
-        $rows[2]= array("column" => "nb_views", "label" => "Nombre de vues");
-        $rows[3]= array("column" => "date_creation", "label" => "Date de création de l'article");
+        $rows = [];
+        $rows[0] = array( "column" => "title", "label" => "Titre de l'article");
+        $rows[1] = array("column" => "nb_comments", "label" => "Nombre de commentaires");
+        $rows[2] = array("column" => "nb_views", "label" => "Nombre de vues");
+        $rows[3] = array("column" => "date_creation", "label" => "Date de création de l'article");
 
 
         //On récupère nos articles et countNbComment.
         $articleManager = new ArticleManager();
-        $info= $articleManager->countTablePage($page);
+        $info = $articleManager->countTablePage($page);
 
         //on passe dans le tableau $info les différentes info qui compose notre l'url
-        $info['column']= $column;
-        $info['order']=$order;
-        $info['action_block']="?action=dashboardArticle";
-        $info['action_comment']="?action=dashboardComment&articleId=";
-        $info['page_block']="&page=$page";
-        $info['filter_block']= $column!== NULL && $order !== NULL ? "&column=$column&order=$order": " ";
+        $info['column'] = $column;
+        $info['order'] = $order;
+        $info['action_block'] = "?action=dashboardArticle";
+        $info['action_comment'] = "?action=dashboardComment&articleId=";
+        $info['page_block'] = "&page=$page";
+        $info['filter_block'] = $column !== null && $order !== null ? "&column=$column&order=$order" : " ";
 
 
 
-        $articleList =$articleManager->getAllArticles($info);
+        $articleList = $articleManager->getAllArticles($info);
 
-        $commentManager= new CommentManager();
-        $commentCountList=$commentManager->countComments();
-        $i=0;
+        $commentManager = new CommentManager();
+        $commentCountList = $commentManager->countComments();
+        $i = 0;
 
 
         //regroupe dans un seul array $data les info, plus simple pour l'envoie des données
-        foreach($articleList as $article){
-            $articleId= $article->getId();
+        foreach($articleList as $article) {
+            $articleId = $article->getId();
 
             // array $data[id, titre, nbvue, nbcomments, date-création]
-            $data[$i]['id']=$articleId;
-            $data[$i]['title']=$article->getTitle();
-            $data[$i]['date_add']=$article->getDateCreation();;
-            $data[$i]['nbViews']=$article->getNbViews();
+            $data[$i]['id'] = $articleId;
+            $data[$i]['title'] = $article->getTitle();
+            $data[$i]['date_add'] = $article->getDateCreation();
+            ;
+            $data[$i]['nbViews'] = $article->getNbViews();
 
             //valeur par défaut
-            $data[$i]['nbComments']=0;
+            $data[$i]['nbComments'] = 0;
 
-            foreach ($commentCountList as $commentRow){
-                if( $commentRow['id_article']==$articleId) {
-                    $data[$i]['nbComments']= $commentRow['nb_comments'];
+            foreach ($commentCountList as $commentRow) {
+                if($commentRow['id_article'] == $articleId) {
+                    $data[$i]['nbComments'] = $commentRow['nb_comments'];
                     break;
                 }
             }
@@ -255,7 +256,7 @@ class AdminController {
         $view->render("dashboardArticle", [
             'articles' => $data,
             'info' => $info,
-            'rows'=> $rows
+            'rows' => $rows
 
         ]);
     }

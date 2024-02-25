@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Cette classe sert à gérer les commentaires. 
+ * Cette classe sert à gérer les commentaires.
  */
 class CommentManager extends AbstractEntityManager
 {
@@ -11,10 +11,10 @@ class CommentManager extends AbstractEntityManager
      * @param array $info
      * @return array : un tableau d'objets Comment.
      */
-    public function getAllCommentsByArticleId(int $idArticle, array $info=[]) : array
+    public function getAllCommentsByArticleId(int $idArticle, array $info = []): array
     {
-        $page="";
-        $filter="";
+        $page = "";
+        $filter = "";
 
         //define specified querry part in case if page and column ordering are specified in url. Querry use for dashboard Article view
         if (isset($info['actual_page']) && isset($info['limiter'])) {
@@ -36,12 +36,12 @@ class CommentManager extends AbstractEntityManager
                 $page = " LIMIT $firstArticle, $limiter ";
             }
         }
-            $sql = "SELECT * FROM comment WHERE id_article = $idArticle $filter $page";
-            $result = $this->db->query($sql);
-            $comments = [];
-            while ($comment = $result->fetch()) {
-                $comments[] = new Comment($comment);
-            }
+        $sql = "SELECT * FROM comment WHERE id_article = $idArticle $filter $page";
+        $result = $this->db->query($sql);
+        $comments = [];
+        while ($comment = $result->fetch()) {
+            $comments[] = new Comment($comment);
+        }
         return $comments;
     }
 
@@ -50,7 +50,7 @@ class CommentManager extends AbstractEntityManager
      * @param int $id : l'id du commentaire.
      * @return Comment|null : un objet Comment ou null si le commentaire n'existe pas.
      */
-    public function getCommentById(int $id) : ?Comment
+    public function getCommentById(int $id): ?Comment
     {
         $sql = "SELECT * FROM comment WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $id]);
@@ -66,7 +66,7 @@ class CommentManager extends AbstractEntityManager
      * @param Comment $comment : l'objet Comment à ajouter.
      * @return bool : true si l'ajout a réussi, false sinon.
      */
-    public function addComment(Comment $comment) : bool
+    public function addComment(Comment $comment): bool
     {
         $sql = "INSERT INTO comment (pseudo, content, id_article, date_creation) VALUES (:pseudo, :content, :idArticle, NOW())";
         $result = $this->db->query($sql, [
@@ -82,7 +82,7 @@ class CommentManager extends AbstractEntityManager
      * @param Comment $comment : l'objet Comment à supprimer.
      * @return bool : true si la suppression a réussi, false sinon.
      */
-    public function deleteComment(Comment $comment) : bool
+    public function deleteComment(Comment $comment): bool
     {
         $sql = "DELETE FROM comment WHERE id = :id";
         $result = $this->db->query($sql, ['id' => $comment->getId()]);
@@ -112,24 +112,22 @@ class CommentManager extends AbstractEntityManager
     public function countPageComment(int $actualPage, int $idArticle)
     {
         //parameter from number of article to display in page
-        $nbCommentInPage=5;
+        $nbCommentInPage = 5;
         $countList = $this->countComments();
-        $countComment=0;
+        $countComment = 0;
 
-        foreach($countList as $comment)
-        {
-            if($comment['id_article'] == $idArticle)
-            {
-                $countComment= $comment['nb_comments'];
+        foreach($countList as $comment) {
+            if($comment['id_article'] == $idArticle) {
+                $countComment = $comment['nb_comments'];
             }
         }
 
-        $nbPage = ceil($countComment/ $nbCommentInPage);
+        $nbPage = ceil($countComment / $nbCommentInPage);
 
-        $info=[];
+        $info = [];
         $info['nb_pages'] = intval($nbPage);
         $info['limiter'] = $nbCommentInPage;
-        $info['actual_page']=$actualPage;
+        $info['actual_page'] = $actualPage;
 
         return $info;
     }

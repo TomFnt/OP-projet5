@@ -3,24 +3,22 @@
         <thead>
         <tr>
             <?php
-            foreach($rows as $i => $row){ ?>
-                <?php if($row['column']==$info['column'] && $info['order']=='ASC') {?>
+            foreach($rows as $i => $row) { ?>
+                <?php if($row['column'] == $info['column'] && $info['order'] == 'ASC') {?>
                     <th>
                         <a href="<?=$info['action_block'].$info['page_block'].'&column='.$info['column']?>">
                             <?= $row['label']?>
                             <span class="arrow-down"></span>
                         </a>
                     </th>
-                <?php }
-                 elseif($row['column']==$info['column'] && $info['order']=='DESC') {?>
+                <?php } elseif($row['column'] == $info['column'] && $info['order'] == 'DESC') {?>
                     <th>
                         <a href="<?=$info['action_block'].$info['page_block'].'&column='.$info['column'].'&order=ASC'?>">
                         <?= $row['label']?>
                             <span class="arrow-up"></span>
                         </a>
                     </th>
-                <?php }
-                else{ ?>
+                <?php } else { ?>
                     <th>
                         <a href="<?=$info['action_block'].$info['page_block'].'&column='.$row['column'].'&order=DESC'?>">
                             <?= $row['label']?>
@@ -34,10 +32,9 @@
         <?php foreach ($articles as $i => $article) {?>
             <tr>
                 <td> <?=$article['title']?></td>
-                <?php if($article['nbComments']==0){?>
+                <?php if($article['nbComments'] == 0) {?>
                     <td><?=$article['nbComments']?></td>
-                <?php }
-                else{?>
+                <?php } else {?>
                 <td> <a href="<?=$info['action_comment'].$article['id'].$info['page_block']?>" class="comment-link"><?=$article['nbComments']?></a></td>
                 <?php }?>
                 <td><?=$article['nbViews'] ?></td>
@@ -49,7 +46,7 @@
 
 <div class="pagination">
     <?php for($page = 1; $page <= $info['nb_pages']; $page++): ?>
-    <a href="<?= $info['action_block']."&page=$page".$info['filter_block']?>" class="<?=($page==$info['actual_page'])? 'current-page': ''?>">
+    <a href="<?= $info['action_block']."&page=$page".$info['filter_block']?>" class="<?=($page == $info['actual_page']) ? 'current-page' : ''?>">
         <?=$page?>
     </a>
     <?php endfor ?>

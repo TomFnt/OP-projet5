@@ -1,8 +1,8 @@
 <?php
-    /**
-     * Ce template affiche un article et ses commentaires.
-     * Il affiche également un formulaire pour ajouter un commentaire.
-     */
+/**
+ * Ce template affiche un article et ses commentaires.
+ * Il affiche également un formulaire pour ajouter un commentaire.
+ */
 ?>
 
 <article class="mainArticle">
@@ -21,7 +21,7 @@
 
 <div class="comments">
     <h2 class="commentsTitle">Vos Commentaires</h2>
-    <?php 
+    <?php
         if (empty($comments)) {
             echo '<p class="info">Aucun commentaire pour cet article.</p>';
         } else {
@@ -34,10 +34,10 @@
                 echo '      <p class="content">' . Utils::format($comment->getContent()) . '</p>';
                 echo '  </div>';
                 echo '</li>';
-            }               
+            }
             echo '</ul>';
-        } 
-    ?>
+        }
+?>
 
     <form action="index.php" method="post" class="foldedCorner">
         <h2>Commenter</h2>

@@ -1,7 +1,7 @@
 <?php
-    /**
-     * Affichage de Liste des articles. 
-     */
+/**
+ * Affichage de Liste des articles.
+ */
 ?>
 
 <div class="articleList">
