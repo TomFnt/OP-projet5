@@ -94,7 +94,7 @@ class CommentManager extends AbstractEntityManager
      * @param
      * @return array $nbComments
      */
-    public function countComments()
+    public function countComments(): array
     {
         $sql = "SELECT id_article, COUNT(*) AS nb_comments FROM comment GROUP BY id_article;";
         $nbComments = $this->db->query($sql);
@@ -105,19 +105,19 @@ class CommentManager extends AbstractEntityManager
 
     /**
      * Compte le nombre de page à afficher dans la pagination du tableau de la page dashboard Comment
-     * @param  int $actualPage
-     * @param  int $idArticle
+     * @param int $actualPage
+     * @param int $idArticle
      * @return array $info
      */
-    public function countPageComment(int $actualPage, int $idArticle)
+    public function countPageComment(int $actualPage, int $idArticle): array
     {
         //parameter from number of article to display in page
         $nbCommentInPage = 5;
         $countList = $this->countComments();
         $countComment = 0;
 
-        foreach($countList as $comment) {
-            if($comment['id_article'] == $idArticle) {
+        foreach ($countList as $comment) {
+            if ($comment['id_article'] == $idArticle) {
                 $countComment = $comment['nb_comments'];
             }
         }
