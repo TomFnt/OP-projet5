@@ -19,6 +19,19 @@
 CREATE DATABASE IF NOT EXISTS `blog_forteroche` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `blog_forteroche`;
 
+-- Listage de la structure de table blog_forteroche. user
+CREATE TABLE IF NOT EXISTS `user` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `login` varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `nickname` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+-- Listage des données de la table blog_forteroche.user : ~1 rows (environ)
+INSERT INTO `user` (`id`, `login`, `password`, `nickname`) VALUES
+    (1, 'Emilie', '$2y$10$OefkCWfcDo.GKgFS2qmFYuITgzdDsrBp67p2.IrJOutZ9ptcsKCb.', 'Emilie Forteroche');
+
 -- Listage de la structure de table blog_forteroche. article
 CREATE TABLE IF NOT EXISTS `article` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -71,19 +84,6 @@ INSERT INTO `comment` (`id`, `id_article`, `pseudo`, `content`, `date_creation`)
 	(66, 14, 'Lorem Ipsum', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non fermentum mi. Suspendisse potenti. Vivamus nec vestibulum enim. Donec lacus ligula, facilisis eget arcu ac, vulputate blandit nunc. Fusce bibendum auctor cursus. Aenean cursus ante sed metus vulputate, ut maximus nisi commodo. Suspendisse nunc dui, sollicitudin ut porttitor nec, dictum nec nunc. Maecenas vel iaculis sapien, a pretium nibh. Phasellus vulputate feugiat risus, et luctus lorem blandit quis.', '2024-02-25 15:09:00'),
 	(67, 14, 'Pierre', 'Pas mal ', '2024-02-25 15:10:04'),
 	(68, 14, 'Tituan', 'Totalement d\'accord avec Pierre, une masterclass cette article ', '2024-02-25 16:10:46');
-
--- Listage de la structure de table blog_forteroche. user
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `login` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `nickname` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
-
--- Listage des données de la table blog_forteroche.user : ~1 rows (environ)
-INSERT INTO `user` (`id`, `login`, `password`, `nickname`) VALUES
-	(1, 'Emilie', '$2y$10$OefkCWfcDo.GKgFS2qmFYuITgzdDsrBp67p2.IrJOutZ9ptcsKCb.', 'Emilie Forteroche');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
